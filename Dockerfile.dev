@@ -1,0 +1,43 @@
+# Development Dockerfile for Python 3.13
+FROM python:3.13-slim
+
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PYTHONHASHSEED=random \
+    UV_CACHE_DIR=/tmp/uv-cache
+
+# Set work directory
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        build-essential \
+        libpq-dev \
+        curl \
+        netcat-openbsd \
+        git \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install uv for faster package management
+RUN pip install uv
+
+# Copy dependency files
+COPY pyproject.toml uv.lock ./
+
+# Install Python dependencies (without dev dependencies for now to avoid django_extensions error)
+RUN uv sync --frozen --no-dev
+
+# Create directories with proper permissions
+RUN mkdir -p /app/staticfiles /app/media /app/logs \
+    && chmod 755 /app/staticfiles /app/media /app/logs
+
+# Copy project (this will be overridden by volume mount in development)
+COPY . .
+
+# Expose port
+EXPOSE 8000
+
+# Default command for development (will be overridden in docker-compose)
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

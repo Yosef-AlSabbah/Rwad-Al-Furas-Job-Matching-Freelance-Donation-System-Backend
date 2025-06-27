@@ -1,0 +1,106 @@
+version: '3.8'
+
+services:
+  rawad_database:
+    image: postgres:17-alpine
+    container_name: rawad_database_dev
+    environment:
+      POSTGRES_DB: rawad_db_dev
+      POSTGRES_USER: rawad_user
+      POSTGRES_PASSWORD: rawad_dev_password
+    volumes:
+      - rawad_postgres_dev_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    networks:
+      - rawad_dev_network
+    restart: unless-stopped
+
+  rawad_redis:
+    image: redis:8.0-alpine
+    container_name: rawad_redis_dev
+    command: redis-server --requirepass rawad_dev_redis_password
+    volumes:
+      - rawad_redis_dev_data:/data
+    ports:
+      - "6380:6379"
+    networks:
+      - rawad_dev_network
+    restart: unless-stopped
+
+  rawad_backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: rawad_backend_dev
+    environment:
+      - DJANGO_SETTINGS_MODULE=core.settings.development
+      - POSTGRES_HOST=rawad_database
+      - POSTGRES_USER=rawad_user
+      - POSTGRES_PASSWORD=rawad_dev_password
+      - POSTGRES_NAME=rawad_db_dev
+      - REDIS_HOST=rawad_redis
+      - REDIS_PASSWORD=rawad_dev_redis_password
+    volumes:
+      # 🔥 LIVE CODE RELOADING - Mount your entire project
+      - .:/app
+      - /app/.venv  # Exclude virtual environment
+      # Don't mount staticfiles - let Django handle it internally
+      - ./media:/app/media
+    ports:
+      - "8000:8000"
+    depends_on:
+      - rawad_database
+      - rawad_redis
+    networks:
+      - rawad_dev_network
+    restart: unless-stopped
+    # Override entrypoint to skip collectstatic in development
+    entrypoint: []
+    command: >
+      bash -c "
+        echo '🚀 Starting Development Server...'
+        source .venv/bin/activate
+        python manage.py migrate --noinput
+        python manage.py runserver 0.0.0.0:8000
+      "
+
+  rawad_celery_worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: rawad_celery_worker_dev
+    environment:
+      - DJANGO_SETTINGS_MODULE=core.settings.development
+      - POSTGRES_HOST=rawad_database
+      - POSTGRES_USER=rawad_user
+      - POSTGRES_PASSWORD=rawad_dev_password
+      - POSTGRES_NAME=rawad_db_dev
+      - REDIS_HOST=rawad_redis
+      - REDIS_PASSWORD=rawad_dev_redis_password
+    volumes:
+      # 🔥 LIVE CODE RELOADING for Celery too
+      - .:/app
+      - /app/.venv
+    depends_on:
+      - rawad_database
+      - rawad_redis
+    networks:
+      - rawad_dev_network
+    restart: unless-stopped
+    # Override entrypoint for Celery - no static files needed
+    entrypoint: []
+    command: >
+      bash -c "
+        echo '🔄 Starting Celery Worker...'
+        source .venv/bin/activate
+        celery -A core worker --loglevel=info --concurrency=2
+      "
+
+volumes:
+  rawad_postgres_dev_data:
+  rawad_redis_dev_data:
+
+networks:
+  rawad_dev_network:
+    driver: bridge

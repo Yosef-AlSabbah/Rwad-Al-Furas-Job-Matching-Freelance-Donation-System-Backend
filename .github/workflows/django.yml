@@ -1,0 +1,100 @@
+name: Django CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+      redis:
+        image: redis:8.0-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install UV
+      run: pip install uv
+
+    - name: Cache UV dependencies
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/uv
+        key: ${{ runner.os }}-uv-${{ hashFiles('**/uv.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-uv-
+
+    - name: Install Dependencies
+      run: |
+        uv sync --dev
+
+    - name: Run linting with flake8
+      run: |
+        source .venv/bin/activate
+        flake8 --exclude=.venv,venv,env,.env,migrations,__pycache__,build,dist,*.egg-info,.tox,.coverage,htmlcov,.pytest_cache,.mypy_cache,staticfiles,media --count --select=E9,F63,F7,F82 --show-source --statistics .
+        flake8 --exclude=.venv,venv,env,.env,migrations,__pycache__,build,dist,*.egg-info,.tox,.coverage,htmlcov,.pytest_cache,.mypy_cache,staticfiles,media --count --exit-zero --max-complexity=10 --max-line-length=88 --statistics .
+
+    - name: Check code formatting with Black
+      run: |
+        source .venv/bin/activate
+        black --check .
+
+    - name: Check import sorting with isort
+      run: |
+        source .venv/bin/activate
+        isort --check-only .
+
+    - name: Run Tests
+      env:
+        DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db
+        REDIS_URL: redis://localhost:6379/0
+        SECRET_KEY: test-secret-key-for-github-actions
+        DEBUG: 'True'
+        ALLOWED_HOSTS: '["localhost", "127.0.0.1"]'
+        CORS_ALLOWED_ORIGINS: '["http://localhost:3000", "http://127.0.0.1:3000"]'
+        REDIS_HOST: localhost
+        REDIS_PORT: 6379
+        REDIS_PASSWORD: test-redis-password
+        POSTGRES_NAME: test_db
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres
+        POSTGRES_HOST: localhost
+        POSTGRES_PORT: 5432
+      run: |
+        source .venv/bin/activate
+        python manage.py collectstatic --noinput
+        python manage.py migrate
+        python manage.py test --verbosity=2

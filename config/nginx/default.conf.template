@@ -1,0 +1,25 @@
+upstream django {
+    server unix:///code/config/uwsgi/uwsgi.sock;
+}
+
+server {
+    listen 80;
+    server_name localhost;
+    charset utf-8;
+
+    client_max_body_size 10M;
+
+    location /media/ {
+        alias /code/media/;
+    }
+
+    location /static/ {
+        alias /code/staticfiles/;
+    }
+
+    location / {
+        uwsgi_pass django;
+        include uwsgi_params;
+    }
+}
+
