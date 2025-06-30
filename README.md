@@ -1,294 +1,304 @@
-# 🚀 Django REST API Production Template
+# Rwad Al Furas - Job Matching, Freelance & Donation System Backend
 
-A comprehensive, production-ready Django REST Framework template with modern Python 3.13, containerized architecture, and best practices for scalable web applications.
+A comprehensive platform that connects job seekers, job publishers, and supporters through an integrated system featuring job matching, freelance project management, and community donation initiatives.
 
-## ⭐ Features
+## 🌟 Platform Overview
 
-### 🏗️ **Modern Architecture**
-- **Django 5.2+** with REST Framework
-- **Python 3.13** with UV package manager for blazing-fast dependency management
-- **PostgreSQL 17** with optimized connection pooling
-- **Redis 8.0** for caching and message brokering
-- **Celery** for asynchronous task processing
-- **Nginx 1.27** reverse proxy with compression and security headers
-- **Gunicorn** WSGI server with optimized worker configuration
+This system serves four main user types:
+- **Job Seekers**: Professionals looking for employment opportunities
+- **Job Publishers**: Companies and individuals posting job opportunities  
+- **Supporters**: Community members contributing to donation initiatives
+- **Admin**: Platform administrators managing the entire ecosystem
 
-### 🐳 **Docker & DevOps**
-- **Multi-stage Docker builds** for production optimization
-- **Docker Compose** for both development and production environments
-- **Live code reloading** in development with volume mounting
-- **Health checks** and graceful shutdowns
-- **Separate development/production configurations**
+## 🚀 Features
 
-### 🔐 **Security & Authentication**
-- **JWT authentication** with refresh tokens
-- **CORS configuration** for cross-origin requests
-- **Security headers** (HSTS, XSS protection, content type sniffing)
-- **Session security** with HttpOnly cookies
-- **Environment-based configuration** with Pydantic settings
+### 👤 Job Seeker Module
 
-### 📚 **API Documentation**
-- **Swagger/OpenAPI** documentation with drf-spectacular
-- **ReDoc** alternative documentation interface
-- **Standardized API responses** with consistent error handling
-- **Health check endpoints** for monitoring
+#### Registration & Authentication
+- **Registration Fields**: Full name, email, specialization, field of work, date of birth, mobile number, password confirmation
+- **Login**: Email and password authentication
+- **Password Recovery**: Email-based password reset functionality
 
-### 🔄 **Task Queue & Caching**
-- **Celery workers** with Redis broker
-- **Task routing** to different queues (emails, media, reports)
-- **Redis caching** with django-redis
-- **Session storage** in Redis for scalability
+#### Dashboard Features
+1. **Profile Management**
+   - Personal information (name, photo, specialization, field of work)
+   - Experience level and bio
+   - 5-star rating system ⭐
+   - Availability status (available for work or not)
+   - Expected hourly rate
+   - Edit and save functionality
 
-### 🛠️ **Development Experience**
-- **Hot reloading** for both Django and Celery
-- **Django Debug Toolbar** with comprehensive panels
-- **Makefile** with convenient development commands
-- **Code quality tools** (Black, isort, flake8)
-- **Comprehensive logging** configuration
+2. **Services Portfolio**
+   - Service descriptions and work samples
+   - Portfolio management with edit/save capabilities
 
-### 📁 **File Handling**
-- **WhiteNoise** for static file serving
-- **Media file management** with proper permissions
-- **File upload optimization** with size limits
+3. **Job Opportunities**
+   - **Filters**: 
+     - All categories or specific category
+     - Latest posted jobs
+     - Part-time vs full-time positions
+     - Hourly rate vs monthly salary
+   - **Application Limits**: Maximum 5 job applications per week
+   - **Job Details**: Company name/logo, position title, requirements, employment type, location, application deadline
+   - **Actions**: Apply, save to favorites, share via link or social media
 
-## 🚀 Quick Start
+4. **Application Tracking**
+   - Track weekly applications
+   - Color-coded status system:
+     - Yellow: Active applications (within the week)
+     - Red: Expired applications (after a week without acceptance)
+
+5. **Notifications & Inbox**
+   - Job acceptance notifications
+   - Admin communications
+   - System announcements
+
+6. **Employment Status**
+   - When hired, company contacts platform support
+   - Application opportunities are frozen
+   - Employment badge displayed on profile
+
+7. **Technical Support**
+   - Contact admin interface with title, description, and message fields
+
+8. **Co-working Spaces**
+   - Nearby workspace listings
+   - Owner contact information
+   - Power and high-speed internet availability hours
+
+9. **Settings**
+   - Password management
+   - Dark mode toggle
+
+### 🏢 Job Publisher Module
+
+#### Registration Types
+1. **Company Registration**
+   - Company name, location, type (marketing, programming, etc.)
+   - License number, email, mobile, password confirmation
+
+2. **Business Owner Registration**
+   - Full name, mobile, email, password confirmation
+
+3. **Individual Client Registration**
+   - Full name, mobile, email, password confirmation
+
+#### Company Dashboard
+1. **Company Profile**
+   - Company information (name, logo, field, size, headquarters)
+   - Website and LinkedIn links
+   - Company bio and services description
+
+2. **Job Posting**
+   - Job title, description, requirements
+   - Employment type (full-time/part-time)
+   - Salary structure (monthly salary or hourly rate)
+   - Application deadline
+   - External application link and HR email
+
+3. **Posted Jobs Management**
+   - View all published jobs
+   - Filter by date range
+   - Edit and republish functionality
+
+4. **Freelance Project Management**
+   - Project name, description, requirements
+   - Required technologies
+   - Direct documentation upload capability
+
+5. **Published Projects**
+   - Manage all freelance projects
+   - Edit and republish functionality
+
+6. **Technical Support**
+   - Direct communication with platform support
+   - Structured messaging system
+
+7. **Settings**
+   - Password management
+   - Dark mode
+   - Notification inbox
+
+#### Individual Client Dashboard
+1. **Personal Profile**
+   - Photo (optional), full name, location
+   - Business information (if applicable)
+   - Social media links, email, mobile
+
+2. **Work Posting**
+   - **Service Type**: Choose between service or system development
+   - **Service Details**: Name, description, proposed price, delivery timeline
+   - **System Development**: Application, website, or desktop software
+   - **System Requirements**: Full description or documentation upload
+
+3. **Project Management**
+   - Edit and republish posted projects/services
+
+4. **Technical Support**
+   - Platform communication system
+
+5. **Settings**
+   - Password and dark mode management
+   - Notification inbox
+
+### 💝 Supporter Module
+
+#### Registration & Authentication
+- Full name, country, mobile number with country code
+- Email and password confirmation
+- Email/password login system
+
+#### Supporter Dashboard
+1. **Profile Management**
+   - Personal information display
+   - Achievement badges based on donation frequency and amounts
+   - Color-coded recognition system
+
+2. **Initiative Browsing**
+   - **Filters**:
+     - Latest initiatives
+     - Price range ($500-$1000, $1000-$5000, etc.)
+     - Initiative type (technical, community, humanitarian)
+   - **Progress Tracking**: Visual indicators showing funding progress toward goals
+   - **Donation Process**: Multiple payment method options
+
+3. **Completed Initiatives**
+   - Photo galleries with descriptions
+   - Success stories and impact reports
+
+4. **Technical Support**
+   - Direct platform communication
+
+5. **Feedback System**
+   - Initiative feedback and interaction capabilities
+
+6. **Settings**
+   - Password management
+   - Dark mode
+   - Notification inbox
+
+### 🔧 Admin Dashboard
+
+#### Authentication
+- Email and password login only
+
+#### Management Features
+1. **User Management**
+   - **Job Seekers**: View, delete, or disable accounts
+   - **Job Publishers**: Account management capabilities
+   - **Supporters**: Account management plus badge assignment based on donation history
+
+2. **Project Evaluation**
+   - Review projects/services from companies and individuals
+   - Send price quotes via email
+   - Contract negotiation and agreement management
+
+3. **Initiative Management**
+   - **Create Initiatives**: Name, description, purpose, target amount, type, date
+   - **Documentation**: Add photos for completed initiatives
+   - **Tracking**: Monitor completed vs. in-progress initiatives
+   - **Management**: Edit and republish initiatives
+
+4. **Settings**
+   - Password management
+   - Dark mode
+
+## 🛠 Technical Stack
+
+- **Backend Framework**: Django 5.2+ with Django REST Framework
+- **Database**: PostgreSQL 17
+- **Cache & Message Broker**: Redis 8.0
+- **Task Queue**: Celery
+- **Authentication**: JWT with django-rest-framework-simplejwt
+- **API Documentation**: DRF Spectacular (OpenAPI/Swagger)
+- **File Handling**: Django file upload with Pillow for images
+- **Containerization**: Docker with Docker Compose
+- **Web Server**: Nginx (production)
+- **WSGI Server**: Gunicorn (production)
+
+## 📋 Development Requirements
+
+### Core Features to Implement
+- [ ] User authentication system for all user types
+- [ ] Role-based access control (RBAC)
+- [ ] Job posting and application system
+- [ ] Freelance project management
+- [ ] Donation initiative platform
+- [ ] File upload and management
+- [ ] Email notification system
+- [ ] Real-time notifications
+- [ ] Search and filtering capabilities
+- [ ] Payment integration for donations
+- [ ] Admin dashboard with full management capabilities
+- [ ] API documentation and testing
+- [ ] Security implementations (rate limiting, input validation)
+- [ ] Mobile-responsive design considerations
+
+### API Endpoints Structure
+- `/api/auth/` - Authentication endpoints
+- `/api/users/` - User management
+- `/api/jobs/` - Job postings and applications
+- `/api/projects/` - Freelance projects
+- `/api/initiatives/` - Donation initiatives
+- `/api/admin/` - Admin-only endpoints
+- `/api/notifications/` - Notification system
+- `/api/support/` - Technical support
+
+## 🚀 Getting Started
 
 ### Prerequisites
-- Docker & Docker Compose
-- Python 3.13+ (for local development)
-- UV package manager (optional but recommended)
+- Python 3.13+
+- Docker and Docker Compose
+- PostgreSQL 17
+- Redis 8.0
 
-### 1. Clone and Setup
+### Development Setup
 ```bash
-# Clone the template
-git clone <your-repo-url>
-cd django-rest-template
+# Clone the repository
+git clone <repository-url>
+cd Rwad-Al-Furas-Job-Matching-Freelance-Donation-System-Backend
 
-# Copy environment configuration
-cp .env.example .env
-# Edit .env with your settings
-```
-
-### 2. Development Environment
-```bash
-# Start all services (PostgreSQL, Redis, Django, Celery)
-docker-compose -f docker-compose.dev.yml up -d
+# Start development environment
+docker-compose -f docker-compose.dev.yml up --build
 
 # Run migrations
-docker-compose -f docker-compose.dev.yml exec backend python manage.py migrate
+docker-compose -f docker-compose.dev.yml exec rwad_furas_backend python manage.py migrate
 
 # Create superuser
-docker-compose -f docker-compose.dev.yml exec backend python manage.py createsuperuser
-
-# Access your application
-# API: http://localhost:8000
-# Docs: http://localhost:8000/api/docs/
-# Admin: http://localhost:8000/admin/
+docker-compose -f docker-compose.dev.yml exec rwad_furas_backend python manage.py createsuperuser
 ```
 
-### 3. Production Deployment
+### Production Deployment
 ```bash
-# Build production containers
-docker-compose build
+# Start production environment
+docker-compose up --build -d
 
-# Deploy with optimized settings
-docker-compose up -d
+# Collect static files
+docker-compose exec rwad_furas_backend python manage.py collectstatic --noinput
 ```
-
-## 📋 Available Commands
-
-The template includes a comprehensive Makefile for easy development:
-
-```bash
-# Development
-make dev-up          # Start development environment
-make dev-down        # Stop development environment
-make dev-logs        # View logs
-make dev-shell       # Access container shell
-
-# Django Management
-make migrate         # Run database migrations
-make makemigrations  # Create new migrations
-make superuser       # Create admin user
-make collectstatic   # Collect static files
-
-# Code Quality
-make test           # Run tests
-make lint           # Run linting
-make format         # Format code (Black + isort)
-
-# Production
-make prod-build     # Build production containers
-make prod-up        # Start production environment
-make prod-down      # Stop production environment
-```
-
-## 🏗️ Architecture Overview
-
-### Container Architecture
-```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   Nginx Proxy   │    │  Django + DRF   │    │ Celery Workers  │
-│   (Port 80/443) │───▶│   (Port 8000)   │    │                 │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-                                │                        │
-                                ▼                        ▼
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│  PostgreSQL 17  │    │    Redis 8.0    │    │    Static/Media │
-│   (Port 5432)   │    │   (Port 6379)   │    │      Files      │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-```
-
-### Key Components
-- **API Layer**: Django REST Framework with JWT authentication
-- **Database**: PostgreSQL with connection pooling
-- **Cache**: Redis for sessions, cache, and Celery broker
-- **Tasks**: Celery workers for background processing
-- **Proxy**: Nginx for static files, SSL termination, and load balancing
-- **Documentation**: Auto-generated API docs with Swagger/ReDoc
-
-## 🔧 Configuration
-
-### Environment Variables
-Key settings in `.env`:
-```bash
-# Django Core
-SECRET_KEY=your-secret-key
-DEBUG=False
-ALLOWED_HOSTS=yourdomain.com,www.yourdomain.com
-
-# Database
-POSTGRES_NAME=your_db
-POSTGRES_USER=your_user
-POSTGRES_PASSWORD=your_password
-
-# Redis
-REDIS_PASSWORD=your_redis_password
-
-# Security
-CORS_ALLOWED_ORIGINS=https://yourdomain.com
-```
-
-### Settings Structure
-- `base.py` - Common settings for all environments
-- `development.py` - Development-specific overrides
-- `production.py` - Production security and optimizations
-- `config.py` - Environment variable management with Pydantic
 
 ## 📚 API Documentation
 
-### Endpoints
-- **Health Check**: `GET /health/`
-- **API Root**: `GET /api/`
-- **Authentication**: `POST /api/auth/token/`
-- **Token Refresh**: `POST /api/auth/token/refresh/`
-- **API Schema**: `GET /api/schema/`
-- **Swagger Docs**: `GET /api/docs/`
-- **ReDoc**: `GET /api/redoc/`
-
-### Adding New Apps
-1. Create Django app: `python manage.py startapp your_app`
-2. Add to `LOCAL_APPS` in `settings/base.py`
-3. Create URLs and include in `core/urls.py`
-4. Build your models, serializers, and views
-
-## 🔄 Celery Tasks
-
-### Task Examples
-```python
-from core.tasks import send_email_task
-
-# Send email asynchronously
-send_email_task.delay(
-    subject="Welcome!",
-    message="Welcome to our platform",
-    recipient_list=["user@example.com"]
-)
-```
-
-### Task Queues
-- **emails**: Email sending tasks
-- **media**: Image/file processing
-- **reports**: Report generation
-- **default**: General background tasks
-
-## 🛡️ Security Features
-
-- **HTTPS ready** with SSL/TLS configuration
-- **Security headers** (HSTS, XSS protection, CSRF)
-- **CORS configuration** for API access
-- **JWT tokens** with automatic refresh
-- **Session security** with secure cookies
-- **Input validation** and sanitization
-- **Rate limiting ready** (easily configurable)
-
-## 🚀 Production Optimizations
-
-- **Multi-stage Docker builds** for smaller images
-- **Static file compression** with WhiteNoise
-- **Database connection pooling**
-- **Redis connection optimization**
-- **Gunicorn worker tuning**
-- **Nginx caching and compression**
-- **Health check endpoints**
-- **Graceful shutdowns**
-
-## 📊 Monitoring & Logging
-
-- **Structured logging** with configurable levels
-- **Health check endpoints** for load balancers
-- **Database query monitoring** (in development)
-- **Celery task monitoring** with built-in tools
-- **Error tracking ready** (easily integrate Sentry)
-
-## 🧪 Testing
-
-```bash
-# Run tests
-make test
-
-# Run with coverage
-uv run pytest --cov=.
-
-# Run specific test
-uv run pytest apps/your_app/tests/
-```
-
-## 📝 Code Quality
-
-The template includes pre-configured code quality tools:
-- **Black**: Code formatting
-- **isort**: Import sorting
-- **flake8**: Linting
-- **pytest**: Testing framework
+API documentation is available at:
+- Development: `http://localhost:8000/api/schema/swagger-ui/`
+- Production: `https://api.rwad-furas.com/api/schema/swagger-ui/`
 
 ## 🤝 Contributing
 
 1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
 
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+## 👨‍💻 Analysis & Development
 
-- Django REST Framework team for the excellent API framework
-- Celery team for robust task queue implementation
-- Redis team for blazing-fast caching and messaging
-- Docker team for containerization excellence
-
-## 📞 Support
-
-- **Documentation**: Check the `/api/docs/` endpoint for API documentation
-- **Issues**: Open an issue on GitHub for bug reports
-- **Discussions**: Use GitHub Discussions for questions and ideas
+**Analysis By**: Eng Adham Saed, Computer Engineer
 
 ---
 
-**⭐ If this template helped you, please give it a star!**
-
-Built with ❤️ for the Django community
+*Building bridges between talent and opportunity while fostering community support through technology.*

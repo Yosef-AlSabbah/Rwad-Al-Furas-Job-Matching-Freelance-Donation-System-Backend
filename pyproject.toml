@@ -1,7 +1,7 @@
 [project]
-name = "rawad-al-furas-job-matching-freelance-donation-system-backend"
+name = "rwad-al-furas-job-matching-freelance-donation-system-backend"
 version = "0.1.0"
-description = "Rawad Al Furas Job Matching, Freelance & Donation System Backend"
+description = "Rwad Al Furas Job Matching, Freelance & Donation System Backend - A comprehensive platform for job seekers, job publishers, and supporters with admin dashboard"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
@@ -25,6 +25,8 @@ dependencies = [
     "pillow>=10.4.0",
     "python-dotenv>=1.0.0",
     "redis>=5.2.1",
+    "phonenumbers>=9.0.8",
+    "geopy>=2.4.1",
 ]
 
 [dependency-groups]

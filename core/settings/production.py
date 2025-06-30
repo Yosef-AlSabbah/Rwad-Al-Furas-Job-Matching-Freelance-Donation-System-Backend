@@ -10,9 +10,9 @@ from .base import *
 # Production Security Settings
 DEBUG = False
 ALLOWED_HOSTS = [
-    "rawad.com",
-    "www.rawad.com",
-    "api.rawad.com",
+    "rwad-furas.com",
+    "www.rwad-furas.com",
+    "api.rwad-furas.com",
     "localhost",
     "127.0.0.1",
 ]
@@ -53,9 +53,9 @@ if "debug_toolbar.middleware.DebugToolbarMiddleware" in MIDDLEWARE:
 # CORS Settings for Production
 CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOWED_ORIGINS = [
-    "https://rawad.com",
-    "https://www.rawad.com",
-    "https://app.rawad.com",
+    "https://rwad-furas.com",
+    "https://www.rwad-furas.com",
+    "https://app.rwad-furas.com",
 ]
 
 # Email Configuration for Production

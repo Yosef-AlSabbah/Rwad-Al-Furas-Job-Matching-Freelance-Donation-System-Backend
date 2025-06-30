@@ -1,36 +1,36 @@
 version: '3.8'
 
 services:
-  rawad_database:
+  rwad_furas_database:
     image: postgres:17-alpine
-    container_name: rawad_database
+    container_name: rwad_furas_database
     environment:
-      POSTGRES_DB: rawad_db
-      POSTGRES_USER: rawad_user
-      POSTGRES_PASSWORD: rawad_password_2025
+      POSTGRES_DB: rwad_furas_db
+      POSTGRES_USER: rwad_furas_user
+      POSTGRES_PASSWORD: rwad_furas_password_2025
     volumes:
-      - rawad_postgres_data:/var/lib/postgresql/data
+      - rwad_furas_postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     networks:
-      - rawad_network
+      - rwad_furas_network
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U rawad_user -d rawad_db"]
+      test: ["CMD-SHELL", "pg_isready -U rwad_furas_user -d rwad_furas_db"]
       interval: 30s
       timeout: 10s
       retries: 3
 
-  rawad_redis:
+  rwad_furas_redis:
     image: redis:8.0-alpine
-    container_name: rawad_redis
-    command: redis-server --requirepass rawad_redis_password_2025
+    container_name: rwad_furas_redis
+    command: redis-server --requirepass rwad_furas_redis_password_2025
     volumes:
-      - rawad_redis_data:/data
+      - rwad_furas_redis_data:/data
     ports:
       - "6379:6379"
     networks:
-      - rawad_network
+      - rwad_furas_network
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
@@ -38,49 +38,49 @@ services:
       timeout: 10s
       retries: 3
 
-  rawad_backend:
+  rwad_furas_backend:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: rawad_backend
+    container_name: rwad_furas_backend
     environment:
       - DJANGO_SETTINGS_MODULE=core.settings.production
     volumes:
       - ./media:/app/media
       - ./staticfiles:/app/staticfiles
     depends_on:
-      rawad_database:
+      rwad_furas_database:
         condition: service_healthy
-      rawad_redis:
+      rwad_furas_redis:
         condition: service_healthy
     networks:
-      - rawad_network
+      - rwad_furas_network
     restart: unless-stopped
     expose:
       - "8000"
 
-  rawad_celery_worker:
+  rwad_furas_celery_worker:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: rawad_celery_worker
+    container_name: rwad_furas_celery_worker
     command: celery -A core worker --loglevel=info --concurrency=4
     environment:
       - DJANGO_SETTINGS_MODULE=core.settings.production
     volumes:
       - ./media:/app/media
     depends_on:
-      rawad_database:
+      rwad_furas_database:
         condition: service_healthy
-      rawad_redis:
+      rwad_furas_redis:
         condition: service_healthy
     networks:
-      - rawad_network
+      - rwad_furas_network
     restart: unless-stopped
 
-  rawad_nginx:
+  rwad_furas_nginx:
     image: nginx:1.27-alpine
-    container_name: rawad_nginx
+    container_name: rwad_furas_nginx
     ports:
       - "80:80"
       - "443:443"
@@ -91,17 +91,17 @@ services:
       - ./media:/app/media:ro
       - ./config/ssl:/etc/nginx/ssl:ro
     depends_on:
-      - rawad_backend
+      - rwad_furas_backend
     networks:
-      - rawad_network
+      - rwad_furas_network
     restart: unless-stopped
 
 volumes:
-  rawad_postgres_data:
+  rwad_furas_postgres_data:
     driver: local
-  rawad_redis_data:
+  rwad_furas_redis_data:
     driver: local
 
 networks:
-  rawad_network:
+  rwad_furas_network:
     driver: bridge

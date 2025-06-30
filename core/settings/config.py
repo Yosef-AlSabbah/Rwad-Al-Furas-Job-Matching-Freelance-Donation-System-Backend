@@ -32,7 +32,7 @@ class Settings(BaseSettings):
     CORS_ALLOWED_ORIGINS: list[str] = [
         "http://localhost:3000",
         "http://127.0.0.1:3000",
-        "https://rawad.local",
+        "https://rwad-furas.local",
     ]
     CORS_ALLOW_CREDENTIALS: bool = True
 
@@ -40,9 +40,9 @@ class Settings(BaseSettings):
     INTERNAL_IPS: list[str] = ["127.0.0.1", "localhost"]
 
     # Redis Configuration
-    REDIS_HOST: str = "rawad_redis"
+    REDIS_HOST: str = "rwad_furas_redis"
     REDIS_PORT: int = 6379
-    REDIS_PASSWORD: str = "rawad_redis_password_2025"
+    REDIS_PASSWORD: str = "rwad_furas_redis_password_2025"
 
     # Cache Configuration
     CACHE_DB_INDEX: int = 0
@@ -57,10 +57,10 @@ class Settings(BaseSettings):
     CELERY_ENABLE_UTC: bool = True
 
     # PostgreSQL Database Configuration
-    POSTGRES_NAME: str = "rawad_db"
-    POSTGRES_USER: str = "rawad_user"
-    POSTGRES_PASSWORD: str = "rawad_password_2025"
-    POSTGRES_HOST: str = "rawad_database"
+    POSTGRES_NAME: str = "rwad_furas_db"
+    POSTGRES_USER: str = "rwad_furas_user"
+    POSTGRES_PASSWORD: str = "rwad_furas_password_2025"
+    POSTGRES_HOST: str = "rwad_furas_database"
     POSTGRES_PORT: int = 5432
 
     # File Upload Settings
@@ -79,6 +79,8 @@ class Settings(BaseSettings):
     EMAIL_HOST_USER: str = ""
     EMAIL_HOST_PASSWORD: str = ""
     DEFAULT_FROM_EMAIL: str = "noreply@rawad.com"
+
+    MOBILE_NUMBER_VERIFICATION_CODE_COOLDOWN_SECONDS: int = 60
 
 
 settings = Settings()

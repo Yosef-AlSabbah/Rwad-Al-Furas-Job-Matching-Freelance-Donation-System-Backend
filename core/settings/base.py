@@ -38,7 +38,7 @@ THIRD_PARTY_APPS = [
 
 # Local apps
 LOCAL_APPS = [
-    # Add your custom apps here
+    "accounts",  # Custom user management
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -141,6 +141,9 @@ CELERY_TASK_TIME_LIMIT = 30 * 60  # 30 minutes
 CELERY_TASK_SOFT_TIME_LIMIT = 25 * 60  # 25 minutes
 CELERY_WORKER_PREFETCH_MULTIPLIER = 4
 CELERY_WORKER_MAX_TASKS_PER_CHILD = 1000
+
+# Custom User Model
+AUTH_USER_MODEL = "accounts.models.user.User"
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -298,3 +301,7 @@ LOGGING = {
         },
     },
 }
+
+MOBILE_NUMBER_VERIFICATION_CODE_COOLDOWN_SECONDS = (
+    settings.MOBILE_NUMBER_VERIFICATION_CODE_COOLDOWN_SECONDS
+)

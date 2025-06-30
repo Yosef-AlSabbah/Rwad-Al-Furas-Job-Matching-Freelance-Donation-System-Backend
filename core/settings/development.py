@@ -15,37 +15,37 @@ ALLOWED_HOSTS = ["*"]
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "rawad_db_dev",
-        "USER": "rawad_user",
-        "PASSWORD": "rawad_dev_password",
-        "HOST": "rawad_database",
+        "NAME": "rwad_furas_db_dev",
+        "USER": "rwad_furas_user",
+        "PASSWORD": "rwad_furas_dev_password",
+        "HOST": "rwad_furas_database",
         "PORT": "5432",
     }
 }
 
 
 # Redis Settings for Development
-def get_redis_url_dev(db_index: int) -> str:
+def get_redis_url(db_index: int) -> str:
     """Generate Redis URL for development environment."""
-    return f"redis://:rawad_dev_redis_password@rawad_redis:6379/{db_index}"
+    return f"redis://:rwad_furas_dev_redis_password@rwad_furas_redis:6379/{db_index}"
 
 
 # Override Redis configuration for development
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": get_redis_url_dev(db_index=0),
+        "LOCATION": get_redis_url(db_index=0),
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         },
-        "KEY_PREFIX": "rawad_dev_cache",
+        "KEY_PREFIX": "rwad_furas_dev_cache",
         "TIMEOUT": 60,  # Short timeout for development
     }
 }
 
 # Celery Settings for Development
-CELERY_BROKER_URL = get_redis_url_dev(db_index=1)
-CELERY_RESULT_BACKEND = get_redis_url_dev(db_index=2)
+CELERY_BROKER_URL = get_redis_url(db_index=1)
+CELERY_RESULT_BACKEND = get_redis_url(db_index=2)
 CELERY_TASK_ALWAYS_EAGER = False  # Set to True to run tasks synchronously
 CELERY_TASK_EAGER_PROPAGATES = True
 

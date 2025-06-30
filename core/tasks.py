@@ -13,6 +13,8 @@ from django.core.mail import send_mail
 from django.core.management import call_command
 from django.utils import timezone
 
+from core.utils.file_handling import resize_image
+
 logger = logging.getLogger(__name__)
 
 
@@ -81,16 +83,16 @@ def send_daily_summary():
 
 
 @shared_task(bind=True)
-def process_image_task(self, image_path, user_id):
+def process_image_task(self, image_path, size):
     """
     Process uploaded images (resize, optimize, etc.).
 
     Args:
         image_path (str): Path to the image file
-        user_id (int): ID of the user who uploaded the image
+        size (tuple): The size to resize the image to
     """
     try:
-        # Implement image processing logic here
+        resize_image(image_path, size)
         logger.info(f"Image processed successfully: {image_path}")
         return f"Image processed: {image_path}"
     except Exception as exc:

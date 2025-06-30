@@ -1,46 +1,46 @@
 version: '3.8'
 
 services:
-  rawad_database:
+  rwad_furas_database:
     image: postgres:17-alpine
-    container_name: rawad_database_dev
+    container_name: rwad_furas_database_dev
     environment:
-      POSTGRES_DB: rawad_db_dev
-      POSTGRES_USER: rawad_user
-      POSTGRES_PASSWORD: rawad_dev_password
+      POSTGRES_DB: rwad_furas_db_dev
+      POSTGRES_USER: rwad_furas_user
+      POSTGRES_PASSWORD: rwad_furas_dev_password
     volumes:
-      - rawad_postgres_dev_data:/var/lib/postgresql/data
+      - rwad_furas_postgres_dev_data:/var/lib/postgresql/data
     ports:
       - "5433:5432"
     networks:
-      - rawad_dev_network
+      - rwad_furas_dev_network
     restart: unless-stopped
 
-  rawad_redis:
+  rwad_furas_redis:
     image: redis:8.0-alpine
-    container_name: rawad_redis_dev
-    command: redis-server --requirepass rawad_dev_redis_password
+    container_name: rwad_furas_redis_dev
+    command: redis-server --requirepass rwad_furas_dev_redis_password
     volumes:
-      - rawad_redis_dev_data:/data
+      - rwad_furas_redis_dev_data:/data
     ports:
       - "6380:6379"
     networks:
-      - rawad_dev_network
+      - rwad_furas_dev_network
     restart: unless-stopped
 
-  rawad_backend:
+  rwad_furas_backend:
     build:
       context: .
       dockerfile: Dockerfile.dev
-    container_name: rawad_backend_dev
+    container_name: rwad_furas_backend_dev
     environment:
       - DJANGO_SETTINGS_MODULE=core.settings.development
-      - POSTGRES_HOST=rawad_database
-      - POSTGRES_USER=rawad_user
-      - POSTGRES_PASSWORD=rawad_dev_password
-      - POSTGRES_NAME=rawad_db_dev
-      - REDIS_HOST=rawad_redis
-      - REDIS_PASSWORD=rawad_dev_redis_password
+      - POSTGRES_HOST=rwad_furas_database
+      - POSTGRES_USER=rwad_furas_user
+      - POSTGRES_PASSWORD=rwad_furas_dev_password
+      - POSTGRES_NAME=rwad_furas_db_dev
+      - REDIS_HOST=rwad_furas_redis
+      - REDIS_PASSWORD=rwad_furas_dev_redis_password
     volumes:
       # 🔥 LIVE CODE RELOADING - Mount your entire project
       - .:/app
@@ -50,10 +50,10 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - rawad_database
-      - rawad_redis
+      - rwad_furas_database
+      - rwad_furas_redis
     networks:
-      - rawad_dev_network
+      - rwad_furas_dev_network
     restart: unless-stopped
     # Override entrypoint to skip collectstatic in development
     entrypoint: []
@@ -65,28 +65,28 @@ services:
         python manage.py runserver 0.0.0.0:8000
       "
 
-  rawad_celery_worker:
+  rwad_furas_celery_worker:
     build:
       context: .
       dockerfile: Dockerfile.dev
-    container_name: rawad_celery_worker_dev
+    container_name: rwad_furas_celery_worker_dev
     environment:
       - DJANGO_SETTINGS_MODULE=core.settings.development
-      - POSTGRES_HOST=rawad_database
-      - POSTGRES_USER=rawad_user
-      - POSTGRES_PASSWORD=rawad_dev_password
-      - POSTGRES_NAME=rawad_db_dev
-      - REDIS_HOST=rawad_redis
-      - REDIS_PASSWORD=rawad_dev_redis_password
+      - POSTGRES_HOST=rwad_furas_database
+      - POSTGRES_USER=rwad_furas_user
+      - POSTGRES_PASSWORD=rwad_furas_dev_password
+      - POSTGRES_NAME=rwad_furas_db_dev
+      - REDIS_HOST=rwad_furas_redis
+      - REDIS_PASSWORD=rwad_furas_dev_redis_password
     volumes:
       # 🔥 LIVE CODE RELOADING for Celery too
       - .:/app
       - /app/.venv
     depends_on:
-      - rawad_database
-      - rawad_redis
+      - rwad_furas_database
+      - rwad_furas_redis
     networks:
-      - rawad_dev_network
+      - rwad_furas_dev_network
     restart: unless-stopped
     # Override entrypoint for Celery - no static files needed
     entrypoint: []
@@ -98,9 +98,9 @@ services:
       "
 
 volumes:
-  rawad_postgres_dev_data:
-  rawad_redis_dev_data:
+  rwad_furas_postgres_dev_data:
+  rwad_furas_redis_dev_data:
 
 networks:
-  rawad_dev_network:
+  rwad_furas_dev_network:
     driver: bridge

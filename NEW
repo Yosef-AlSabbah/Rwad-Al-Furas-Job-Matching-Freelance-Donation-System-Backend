@@ -1,0 +1,47 @@
+feat: Implement comprehensive accounts system with user profiles and models
+
+✨ Major Features Added:
+- Custom User model with UUID primary key and role-based system
+- Complete profile system for job seekers, companies, individual clients, and supporters
+- Mobile number verification system with international phone validation
+- Location model with automatic geocoding using Celery tasks
+- WorkSpace (coworking spaces) model for job seekers
+- Support ticket system with comments
+- Rating and donation tracking systems
+
+🏗️ Core Infrastructure:
+- Extended Django settings with custom user model configuration
+- Added Celery tasks for geocoding and image processing
+- Integrated phonenumbers library for international phone validation
+- Added geopy for location services
+- Implemented file handling utilities with image resizing
+- Created comprehensive model managers and signals
+
+📱 User Management:
+- Role-based user system (job_seeker, job_publisher, supporter, staff)
+- Profile inheritance with BaseProfile abstract model
+- Specialized profiles for different user types
+- Mobile number model with verification workflow and security controls
+- Badge system for supporters based on donation levels
+
+🗄️ Database Models:
+- Location model with lat/lng coordinates and address geocoding
+- WorkSpace model for coworking spaces with operating hours
+- Support ticket system with status tracking and comments
+- Rating system for job seekers
+- Donation tracking with supporter badge updates
+
+🔧 Technical Improvements:
+- Updated project branding from "rawad" to "rwad_furas" across all configs
+- Enhanced Docker configuration with proper service naming
+- Added comprehensive validation for phone numbers
+- Implemented automatic image resizing and optimization
+- Added model signals for profile creation and badge updates
+
+📋 Project Documentation:
+- Completely rewrote README with detailed platform overview
+- Added comprehensive feature descriptions for all user types
+- Updated technical stack documentation
+- Added development setup instructions
+
+This commit establishes the foundational user management and profile system for the Rwad Al Furas platform, providing a solid base for job matching, freelance project management, and donation initiatives.
